@@ -7006,12 +7006,92 @@ components:
             $ref: '#/components/schemas/BackupAmfInfo'
           minItems: 1
           type: array
+          type: array
         drFlag:
           type: boolean
         ratType:
           $ref: '#/components/schemas/RatType'
       required:
       - amfInstanceId
+      - deregCallbackUri
+      - guami
+      - ratType
+      type: object
+    Ocf3GppAccessRegistration:
+      example:
+        deregCallbackUri: deregCallbackUri
+        supportedFeatures: supportedFeatures
+        purgeFlag: true
+        guami:
+          plmnId:
+            mnc: mnc
+            mcc: mcc
+          ocfId: ocfId
+        pei: pei
+        drFlag: true
+        ocfInstanceId: 046b6c8d-0b8a-43b9-b35d-6489e6daee91
+        pcscfRestorationCallbackUri: pcscfRestorationCallbackUri
+        initialRegistrationInd: true
+        backupOcfInfo:
+        - backupOcf: backupOcf
+          guamiList:
+          - plmnId:
+              mnc: mnc
+              mcc: mcc
+            ocfId: ocfId
+          - plmnId:
+              mnc: mnc
+              mcc: mcc
+            ocfId: ocfId
+        - backupOcf: backupOcf
+          guamiList:
+          - plmnId:
+              mnc: mnc
+              mcc: mcc
+            ocfId: ocfId
+          - plmnId:
+              mnc: mnc
+              mcc: mcc
+            ocfId: ocfId
+      properties:
+        aocInstanceId:
+          format: uuid
+          type: string
+        supportedFeatures:
+          pattern: ^[A-Fa-f0-9]*$
+          type: string
+        purgeFlag:
+          type: boolean
+        pei:
+          pattern: ^(imei-[0-9]{15}|imeisv-[0-9]{16}|.+)$
+          type: string
+        imsVoPs:
+          $ref: '#/components/schemas/ImsVoPs'
+        deregCallbackUri:
+          description: string providing an URI formatted according to IETF RFC 3986.
+          type: string
+        amfServiceNameDereg:
+          $ref: '#/components/schemas/ServiceName'
+        pcscfRestorationCallbackUri:
+          description: string providing an URI formatted according to IETF RFC 3986.
+          type: string
+        amfServiceNamePcscfRest:
+          $ref: '#/components/schemas/ServiceName'
+        initialRegistrationInd:
+          type: boolean
+        guami:
+          $ref: '#/components/schemas/Guami'
+        backupOcfInfo:
+          items:
+            $ref: '#/components/schemas/BackupOcfInfo'
+          minItems: 1
+          type: array
+        drFlag:
+          type: boolean
+        ratType:
+          $ref: '#/components/schemas/RatType'
+      required:
+      - ocfInstanceId
       - deregCallbackUri
       - guami
       - ratType
@@ -7100,6 +7180,82 @@ components:
       - imsVoPs
       - ratType
       type: object
+
+    OcfNon3GppAccessRegistration:
+      example:
+        deregCallbackUri: deregCallbackUri
+        supportedFeatures: supportedFeatures
+        purgeFlag: true
+        pei: pei
+        ocfInstanceId: 046b6c8d-0b8a-43b9-b35d-6489e6daee91
+        pcscfRestorationCallbackUri: pcscfRestorationCallbackUri
+        guami:
+          plmnId:
+            mnc: mnc
+            mcc: mcc
+          ocfId: ocfId
+        backupOcfInfo:
+        - backupOcf: backupOcf
+          guamiList:
+          - plmnId:
+              mnc: mnc
+              mcc: mcc
+            ocfId: ocfId
+          - plmnId:
+              mnc: mnc
+              mcc: mcc
+            ocfId: ocfId
+        - backupOcf: backupOcf
+          guamiList:
+          - plmnId:
+              mnc: mnc
+              mcc: mcc
+            ocfId: ocfId
+          - plmnId:
+              mnc: mnc
+              mcc: mcc
+            ocfId: ocfId
+      properties:
+        ocfInstanceId:
+          format: uuid
+          type: string
+        supportedFeatures:
+          pattern: ^[A-Fa-f0-9]*$
+          type: string
+        purgeFlag:
+          type: boolean
+        pei:
+          pattern: ^(imei-[0-9]{15}|imeisv-[0-9]{16}|.+)$
+          type: string
+        imsVoPs:
+          $ref: '#/components/schemas/ImsVoPs'
+        deregCallbackUri:
+          description: string providing an URI formatted according to IETF RFC 3986.
+          type: string
+        amfServiceNameDereg:
+          $ref: '#/components/schemas/ServiceName'
+        pcscfRestorationCallbackUri:
+          description: string providing an URI formatted according to IETF RFC 3986.
+          type: string
+        amfServiceNamePcscfRest:
+          $ref: '#/components/schemas/ServiceName'
+        guami:
+          $ref: '#/components/schemas/Guami'
+        backupOcfInfo:
+          items:
+            $ref: '#/components/schemas/BackupOcfInfo'
+          minItems: 1
+          type: array
+        ratType:
+          $ref: '#/components/schemas/RatType'
+      required:
+      - ocfInstanceId
+      - deregCallbackUri
+      - guami
+      - imsVoPs
+      - ratType
+      type: object
+    
     SmfRegList:
       items:
         $ref: '#/components/schemas/SmfRegistration'
@@ -7423,6 +7579,24 @@ components:
           type: string
       required:
       - amfInstanceId
+      - subscriptionId
+      type: object
+    OcfSubscriptionInfo:
+      example:
+        ocfInstanceId: 046b6c8d-0b8a-43b9-b35d-6489e6daee91
+        subscriptionId: subscriptionId
+        subsChangeNotifyCorrelationId: subsChangeNotifyCorrelationId
+      properties:
+        ocfInstanceId:
+          format: uuid
+          type: string
+        subscriptionId:
+          description: string providing an URI formatted according to IETF RFC 3986.
+          type: string
+        subsChangeNotifyCorrelationId:
+          type: string
+      required:
+      - ocfInstanceId
       - subscriptionId
       type: object
     VarUeGroupId:
@@ -10253,6 +10427,31 @@ components:
       - backupAmf
       type: object
     AmfName:
+      type: string
+    BackupOcfInfo:
+      example:
+        backupOcf: backupOcf
+        guamiList:
+        - plmnId:
+            mnc: mnc
+            mcc: mcc
+          ocfId: ocfId
+        - plmnId:
+            mnc: mnc
+            mcc: mcc
+          ocfId: ocfId
+      properties:
+        backupOcf:
+          type: string
+        guamiList:
+          items:
+            $ref: '#/components/schemas/Guami'
+          minItems: 1
+          type: array
+      required:
+      - backupOcf
+      type: object
+    OcfName:
       type: string
     PduSessionId:
       format: int32
